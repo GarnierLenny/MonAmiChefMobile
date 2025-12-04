@@ -1,35 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
-
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { Anchor, Paragraph, View, XStack } from 'tamagui'
 
 export default function ModalScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/modal.tsx" />
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+    <View flex={1} items="center" justify="center">
+      <XStack gap="$2">
+        <Paragraph text="center">Made by</Paragraph>
+        <Anchor color="$blue10" href="https://twitter.com/natebirdman" target="_blank">
+          @natebirdman,
+        </Anchor>
+        <Anchor
+          color="$accent10"
+          href="https://github.com/tamagui/tamagui"
+          target="_blank"
+          rel="noreferrer"
+        >
+          give it a ⭐️
+        </Anchor>
+      </XStack>
     </View>
-  );
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
