@@ -10,7 +10,7 @@ import {
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
-import { Provider } from "components/Provider";
+import { Provider } from "src/components/Provider";
 import { useTheme } from "tamagui";
 
 export {
@@ -58,8 +58,8 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const theme = useTheme();
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+    <ThemeProvider value={DefaultTheme}>
+      <StatusBar style={"dark"} />
       <Stack>
         <Stack.Screen
           name="(tabs)"
