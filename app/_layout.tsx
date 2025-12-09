@@ -56,13 +56,12 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const theme = useTheme();
   return (
     <ThemeProvider value={DefaultTheme}>
       <StatusBar style={"dark"} />
       <Stack>
         <Stack.Screen
-          name="/chat"
+          name="chat"
           options={{
             headerShown: false,
           }}
