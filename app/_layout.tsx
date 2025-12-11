@@ -1,17 +1,17 @@
-import "../tamagui-web.css";
-
-import { useEffect } from "react";
-import { useColorScheme } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
-import { Provider } from "src/components/Provider";
-import { useTheme } from "tamagui";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+import "react-native-reanimated";
+
+import { useColorScheme } from "@/components/useColorScheme";
+import { PaperProvider } from "react-native-paper";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -20,52 +20,59 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "chat",
+  initialRouteName: "(tabs)",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+const theme = {
+  ...DefaultTheme,
+  // Specify custom property
+  myOwnProperty: true,
+  // Specify custom property in nested object
+  colors: {
+    ...DefaultTheme.colors,
+    myOwnColor: "#BADA55",
+  },
+};
+
 export default function RootLayout() {
-  const [interLoaded, interError] = useFonts({
-    Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
-    InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
+  const [loaded, error] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    ...FontAwesome.font,
   });
 
+  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
-    if (interLoaded || interError) {
-      // Hide the splash screen after the fonts have loaded (or an error was returned) and the UI is ready.
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    if (loaded) {
       SplashScreen.hideAsync();
     }
-  }, [interLoaded, interError]);
+  }, [loaded]);
 
-  if (!interLoaded && !interError) {
+  if (!loaded) {
     return null;
   }
 
   return (
-    <Providers>
+    <PaperProvider theme={theme}>
       <RootLayoutNav />
-    </Providers>
+    </PaperProvider>
   );
 }
 
-const Providers = ({ children }: { children: React.ReactNode }) => {
-  return <Provider>{children}</Provider>;
-};
-
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <StatusBar style={"dark"} />
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen
-          name="chat"
-          options={{
-            headerShown: false,
-          }}
-        />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </ThemeProvider>
   );
